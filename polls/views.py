@@ -7,18 +7,11 @@ from polls.models import Choice, Question
 
 def index(request):
   latest_question_list = Question.objects.order_by('-pub_date')[:5]
-  template = loader.get_template('polls/index.html')
-  context = {
-    "latest_question_list": latest_question_list
-  }
-  return HttpResponse(template.render(context, request))
+  return render(request, 'polls\index.html', {'latest_question_list': latest_question_list})
 
 def detail(request, question_id):
-  try:
-    question = Question.objects.get(pk=question_id)
-  except Question.DoesNotExist:
-    raise Http404("Question does not exists")
-  return render(request, 'polls/detail.html', {'question': question})
+  question = get_object_or_404(Question, pk=question_id)
+  return render(request, 'polls/detail.html', context={'question': question})
 
 def results(request, question_id):
   question = get_object_or_404(Question, pk=question_id)
