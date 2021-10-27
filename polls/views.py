@@ -5,7 +5,7 @@ from django.template import loader
 from django.urls import reverse
 from polls.models import Choice, Question
 from django.views import generic
-
+from django.utils import timezone
 """
 TODO: Fix the RACE CONDITION:
 
@@ -27,11 +27,19 @@ class IndexView(generic.ListView):
   context_object_name = 'latest_question_list'
 
   def get_queryset(self):
-      return Question.objects.order_by('-pubdate')[:5]
+    """
+    Return the last five published question (not including those set to be
+    published in the future). 
+    """
+    # return Question.objects.order_by('-pub_date')[:5]
+    return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
   model = Question # django genera el context con los fields del question
   template_name = 'polls/detail.html'
+
+  def get_queryset(self): 
+    return Question.objects.filter(pub_date__lte=timezone.now()) 
 
 class ResultsView(generic.DetailView):
   model = Question # django genera el context con los fields del question
