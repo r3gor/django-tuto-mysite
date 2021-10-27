@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.urls import reverse
 from polls.models import Choice, Question
+from django.views import generic
 
 """
 TODO: Fix the RACE CONDITION:
@@ -21,17 +22,20 @@ Avoiding race conditions using F() to learn how you can solve this issue.
 
 """
 
-def index(request):
-  latest_question_list = Question.objects.order_by('-pub_date')[:5]
-  return render(request, 'polls\index.html', {'latest_question_list': latest_question_list})
+class IndexView(generic.ListView):
+  template_name = 'polls/index.html'
+  context_object_name = 'latest_question_list'
 
-def detail(request, question_id):
-  question = get_object_or_404(Question, pk=question_id)
-  return render(request, 'polls/detail.html', context={'question': question})
+  def get_queryset(self):
+      return Question.objects.order_by('-pubdate')[:5]
 
-def results(request, question_id):
-  question = get_object_or_404(Question, pk=question_id)
-  return render(request, 'polls/result.html', {'question': question})
+class DetailView(generic.DetailView):
+  model = Question # django genera el context con los fields del question
+  template_name = 'polls/detail.html'
+
+class ResultsView(generic.DetailView):
+  model = Question # django genera el context con los fields del question
+  template_name = 'polls/result.html'
 
 def vote(request, question_id):
   question = get_object_or_404(Question, pk=question_id)
