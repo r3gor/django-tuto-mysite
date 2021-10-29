@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-wybq9jhp@f8lmmv#8qv1mv%6i)inz!5q6k7dfxi!w%r1wl1#8e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,7 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
-# TIME_ZONE = 'GTM-5'
 
 USE_I18N = True
 
@@ -140,6 +139,4 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-ALLOWED_HOSTS = ['django-tuto.herokuapp.com', '*']
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
